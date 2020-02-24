@@ -10,7 +10,7 @@ struct optional_byte_t {
 template <size_t N>
 using signature_t = std::array<optional_byte_t, N>;
 
-namespace details {
+namespace {
 constexpr auto char_to_byte(char input) -> uint8_t {
     if (input >= 'a' && input <= 'f') {
         return input - 87;
@@ -35,7 +35,7 @@ constexpr auto signature_string(const char (&input)[N], const std::index_sequenc
 }
 
 template <size_t I = 0, size_t N>
-constexpr auto pattern_matches(const uint8_t* bytes, const signature_t<N>& sig) -> bool {
+auto pattern_matches(const uint8_t* bytes, const signature_t<N>& sig) -> bool {
     if constexpr (I == N) {
         return true;
     } else if (sig[I].has_value && sig[I].value != bytes[I]) {
@@ -48,14 +48,14 @@ constexpr auto pattern_matches(const uint8_t* bytes, const signature_t<N>& sig) 
 } // namespace details
 
 template <size_t N>
-constexpr auto search_address(const uint8_t* begin, const uint8_t* end, const signature_t<N>& sig) -> const uint8_t* {
+auto search_address(const uint8_t* begin, const uint8_t* end, const signature_t<N>& sig) -> const uint8_t* {
     const auto last_search = end - sig.size();
     if (begin >= last_search) {
         return end;
     }
 
     for (; begin != last_search; ++begin) {
-        if (details::pattern_matches(begin, sig)) {
+        if (::pattern_matches(begin, sig)) {
             return begin;
         }
     }
