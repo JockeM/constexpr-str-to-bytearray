@@ -1,12 +1,10 @@
 #include "signature.h"
 
-int main() {
-    constexpr auto signature = make_signature("DE AD ?? BE EF");
+auto sig_scan() {
+    constexpr auto signature = make_signature("?? DE AD ?? BE EF ??");
 
-    std::array<uint8_t, 16> x = {0xFF, 0xFF, 0xFF, 0xFF, 0x23, 0xDE, 0xAD, 0xFF,
+    std::array<uint8_t, 16> bytes = {0xFF, 0xFF, 0xFF, 0xFF, 0x23, 0xDE, 0xAD, 0xFF,
                                  0xBE, 0xEF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
-    auto results = search_address(x.data(), x.data() + x.size(), signature);
-
-    return reinterpret_cast<int>(results);
+    return search_address(bytes.data(), bytes.data() + x.size(), signature);
 }
